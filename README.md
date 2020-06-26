@@ -13,7 +13,7 @@ What is ZTP? When a device that supports Zero-Touch Provisioning boots up, and d
 
 Connect to the Remote Desktop Environment and use MobaXterm to SSH into Ubuntu VM:
 
-![](mobaxterm.png)
+![](imgs/mobaxterm.png)
 
 ## _Step 1:_
 **ZTP Python File:** Review the `ztp-simple.py` file on the Ubuntu VM which is located at `/var/www/html`. This file uses the Python API to set the interface IP address, configure credentials and enables access to the device over the programmatic interfaces, as well as to configure some additional device features. From the Windows Jump Host desktop, onen a SSH session to the **Ubuntu** server and review the `ztp-simple.py` script:
@@ -56,7 +56,7 @@ Check the interface IP assignments:
 >
 > **auto@automation:~$** ip a | grep 10.1.1.3
 
-![](ip_a.png)
+![](imgs/ip_a.png)
 
 
 ## _Step 3:_
@@ -66,7 +66,7 @@ Examine the DHCP server configuration:
 
 >**auto@automation:~$** cat /etc/dhcp/dhcpd.conf
 
-![](cat_dhcpd.png)
+![](imgs/cat_dhcpd.png)
 
 If any changes are made to the configure file it can be restarted with the commands below:
 
@@ -77,7 +77,7 @@ Check the status of the DHCP service to ensure it is running correctly
 > **auto@automation:~$** sudo /etc/init.d/isc-dhcp-server status
 
 
-![](restart_dhcp.png)
+![](imgs/restart_dhcp.png)
 
 ## _Step 4:_
 **Webserver** : The Apache webserver is used to serve the Python file to the IOS XE device as part of the ZTP process. Either TFTP or HTTP can be used for the initial bootstrap configuration. In this example HTTP is used.
@@ -86,19 +86,19 @@ Check the status of the Apache webserver to ensure it is running:
 
 > **auto@automation:~$** sudo /etc/init.d/apache2 status
 
-![](apache_status.png)
+![](imgs/apache_status.png)
 
 Check the configuration for the Apache webserver. This shows which folder the `DocumentRoot` is – this is the location where the Python files are stored:
 
 > **auto@automation:~$* cat /etc/apache2/sites-enabled/000-default.conf | grep -v \#
 
-![](apache_webroot.png)
+![](imgs/apache_webroot.png)
 
 If any changes are required to the Apache webserver configuration file, or if the service needs to be restart then run the following commands:
 
 > **auto@automation:~**$ sudo /etc/init.d/apache2 restart
 
-![](apache_restarted.png)
+![](imgs/apache_restarted.png)
 
 
 ## _Step 5:_
@@ -106,7 +106,7 @@ If any changes are required to the Apache webserver configuration file, or if th
 
 Conect to the Serial Console of the C9300 using MobaXterm's shortcut for **"C9300 - Serial Console"** or from the Ubuntu VM using the ***~/console-helper.sh*** script - Both methods open a serial connection to the pod switch.
 
-![](mobaxterm_console.png)
+![](imgs/mobaxterm_console.png)
 
 Once connected to the serial console the next step is to erase the configuration and reload the device
 
@@ -122,7 +122,7 @@ If prompted to save the configuration, enter `no`
 
 Press enter to confirm reloading
 
-![](wr_er_reload.png)
+![](imgs/wr_er_reload.png)
 
 The device will reload and once IOS XE boots up, the ZTP process will start. The device will obtain the ztp.py configuration file from the Ubuntu server that it receives in the DHCP response.
 
@@ -130,7 +130,7 @@ During this time, the DHCP and HTTP server logs can be followed, and progress ca
 
 > **auto@automation:~$** sh ~/watch_ztp_logs.sh
 
-![](watch_ztp.png)
+![](imgs/watch_ztp.png)
 
 You may also start a ping to watch when the interface on the devices comes back online with the configuration applied. Start a ping to 10.1.1.5 which is the IP address specified in the `ztp-simple.py` file.
 
@@ -138,11 +138,11 @@ You may also start a ping to watch when the interface on the devices comes back 
 
 Once the ICMP ping replies start then the device has been successfully provisioned - You can now log back in using SSH or Telnet.
 
-![](icmp_returns.png)
+![](imgs/icmp_returns.png)
 
 Example output from the serial console that shows successful ZTP and Python file execution:
 
-![](ztp.gif)
+![](imgs/ztp.gif)
 
 
 ## _Conclusion_
